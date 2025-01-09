@@ -25,25 +25,55 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.labolatorium.ui.theme.LabolatoriumTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             LabolatoriumTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                    MainContent()
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = "Movies") },
+                            colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                                containerColor = Color.Magenta
+                            )
+                        )
+                    },
+                    bottomBar = {
+                        BottomAppBar(
+                            containerColor = Color(0xFF001F54) // Granatowy kolor
+                        ) {
+                            Text(
+                                text = "Bottom Bar",
+                                color = Color.White,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+                ) { paddingValues ->
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        MainContent()
+                    }
                 }
             }
         }
@@ -53,7 +83,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainContent(
     movieList: List<String> = listOf(
-        "Avatar", "3000", "PBS", "Christmas is Coming", "03.12.2022", "Cat", "Dog", "Bon Appétit"
+        "Inception",
+        "The Matrix",
+        "Breaking Dawn",
+        "Winter Wonderland",
+        "14.02.2023",
+        "Lion",
+        "Parrot",
+        "Gourmet Feast"
     )
 ) {
     Column(modifier = Modifier.padding(12.dp)) {
@@ -76,7 +113,7 @@ fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
             .height(130.dp)
             .clickable { onItemClick(movie) },
         shape = RoundedCornerShape(corner = CornerSize(26.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp) // Użycie CardDefaults
+        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -87,29 +124,54 @@ fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
                     .padding(12.dp)
                     .size(100.dp),
                 shape = RectangleShape,
-                shadowElevation = 4.dp // W Material3 użyj shadowElevation
+                shadowElevation = 4.dp
             ) {
                 Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Movie image")
             }
             Text(
                 text = movie,
                 modifier = Modifier
-                    .padding(start = 8.dp) // Dodajemy przestrzeń po lewej stronie tekstu
-                    .align(Alignment.CenterVertically) // Wyrównujemy tekst w pionie
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically)
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     LabolatoriumTheme {
-        Greeting("Android")
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Movies") },
+                    colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Magenta
+                    )
+                )
+            },
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = Color(0xFF001F54) // Granatowy kolor
+                ) {
+                    Text(
+                        text = "Bottom Bar",
+                        color = Color.White,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        ) { paddingValues ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                MainContent()
+            }
+        }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }
